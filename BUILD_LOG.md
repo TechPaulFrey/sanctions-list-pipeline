@@ -472,8 +472,10 @@ Done:
 * Paul chose the project name Sanctions List Pipeline (repo `sanctions-list-pipeline`). Replaced the working title in every file (`pyproject.toml`, `README.md`, this log, `uv.lock` regenerated) The local folder rename was blocked because Windows reported it in use; Paul to rename it to `sanctions-list-pipeline` after closing it in VS Code. The Python package name `sanctions_platform` is unchanged, as defined in section 6.
 Proven:
 * `uv sync` succeeds, `uv run ruff check .` reports all checks passed, `uv run pytest` reports 1 passed.
-* Not yet proven: repository visible on GitHub (waiting on the push).
+* Pushed to https://github.com/TechPaulFrey/sanctions-list-pipeline; remote `main` matches local HEAD. Paul's repo had a GitHub-generated README commit, merged with `--allow-unrelated-histories` (project README kept), no force push.
+* Not yet proven: public visibility. The unauthenticated GitHub API returns 404, so the repo is private; the plan requires public.
 Blocked or open:
-* Paul to create the empty public repo `TechPaulFrey/sanctions-list-pipeline` on github.com, then the initial push.
+* Paul to switch the repo to public (Settings, General, Danger Zone, Change visibility).
+* Paul to rename the local folder to `sanctions-list-pipeline` (blocked while open in VS Code).
 Next step:
 * After the push, start Phase 1, task 1 (`config.py`), re-verifying each source URL first.

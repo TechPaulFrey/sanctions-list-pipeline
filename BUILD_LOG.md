@@ -344,7 +344,7 @@ Acceptance criteria:
 ### Phase 8. CI and the daily live run
 1. `ci.yml` on every push and pull request: `uv sync`, `uv run ruff check .`, `uv run pytest`, then `dbt build` against fixture data only. CI never calls the live sources.
 2. `daily.yml` on a schedule (`cron: "0 6 * * *"`) plus manual trigger: run the full pipeline against live sources, publish the dashboard to GitHub Pages.
-3. History persistence between runs: the snapshot tables are exported as compressed Parquet to an orphan branch named `data-history` and restored at the start of each run. Raw files are uploaded as workflow artifacts kept for 30 days. Record this design and its trade offs in `docs/decisions/0002-history-persistence.md`.
+3. History persistence between runs: the snapshot tables are exported as compressed Parquet to an orphan branch named `data-history` and restored at the start of each run. Raw files are uploaded as workflow artifacts kept for 30 days. Record this design and its trade offs in `docs/decisions/0003-history-persistence.md`.
 4. Pin every third party action to its latest major version at build time and note the versions in the decision record.
 Acceptance criteria:
 * CI badge green on the README.
@@ -479,3 +479,28 @@ Blocked or open:
 * Paul to rename the local folder to `sanctions-list-pipeline` (blocked while open in VS Code).
 Next step:
 * After the push, start Phase 1, task 1 (`config.py`), re-verifying each source URL first.
+
+### 26 October 2026, Phase 1 session (Claude Code)
+Done:
+* Re-verified every source URL live (results in `docs/sources/`). All returned HTTP 200. NIGSAC robots.txt returns 404, meaning no restrictions.
+* Found the SDN.XML URL: https://sanctionslistservice.ofac.treas.gov/api/PublicationPreview/exports/SDN.XML. The OFAC page builds its links in JavaScript; this URL follows the documented advanced-file pattern.
+* Built `config.py`, the httpx client with tenacity retries (3 attempts, 2 s then 4 s, on connection errors, 429 and 5xx) and conditional requests, the raw store, the `raw_manifest` table, the NIGSAC crawler (robots.txt, 2 s delay) and the CLI `uv run python -m sanctions_platform.fetch` (exits 1 if any source failed).
+* Documented the OFAC delta format: DeltaFile 1.0 XML with `entity/@action`. The delta entity id equals the SDN.XML uid, verified on the 21 October 2026 file (18 adds all present in SDN.XML, 4 removes all absent).
+* The NIGSAC list page embeds the server clock, so it was re-stored on every run. Added `content_sha256` to the manifest; raw bytes stay unaltered. Decision 0002. Phase 8's history persistence record renumbered to 0003.
+* Wrote the four source docs and `docs/data_licences.md`.
+Proven:
+* 14 tests pass offline (13 fetch tests with respx, 1 package test), including HTTP 503 giving a `failed` row (3 attempts) while other sources store, 304 handling, robots.txt disallow, and clock-only changes on the list page.
+* Live: the first run stored every source (UN 1, OFAC 1, delta 1, UK XML 1, UK CSV 1, NIGSAC list 1, NIGSAC detail 69). After the clock fix, two consecutive runs: the second recorded `unchanged` for every source. UN, OFAC and UK answered 304; NIGSAC compared hashes.
+* UK XML and CSV hold the same 6,423 Unique IDs. The CSV has one row per name, so Phase 4 must reconcile distinct IDs, not rows.
+* All Phase 1 acceptance criteria met.
+Findings for later phases:
+* The UN file was last generated 24 October 23:00 UTC and was still current on 26 October 14:27 UTC, so "nightly" did not hold over this weekend. Watch before fixing the 36-hour freshness threshold.
+* NIGSAC entity detail pages do carry a reference number (label misspelled "Referance Number"), refining section 3 issue 9.
+* NIGSAC tab clock reads Lagos time, which supports the UTC+1 assumption in Phase 2.
+Blocked or open:
+* UN terms: only the general UN website terms were found, which allow personal, non-commercial use with no redistribution. Paul to resolve before publishing the dashboard (details in `docs/data_licences.md`).
+* OFAC terms: no statement found. Paul to confirm.
+* Local folder rename to `sanctions-list-pipeline` still pending.
+* Paul asked to remove Claude as a contributor. Future commits carry no Co-Authored-By trailer. Removing it from already pushed commits needs a history rewrite and force push; waiting for Paul's approval (rule 9).
+Next step:
+* Phase 2, task 1: save trimmed fixtures from today's raw files into `tests/fixtures/`, keeping NIGSAC personal data out of the public repo.

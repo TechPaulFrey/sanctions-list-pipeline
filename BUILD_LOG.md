@@ -473,9 +473,9 @@ Done:
 Proven:
 * `uv sync` succeeds, `uv run ruff check .` reports all checks passed, `uv run pytest` reports 1 passed.
 * Pushed to https://github.com/TechPaulFrey/sanctions-list-pipeline; remote `main` matches local HEAD. Paul's repo had a GitHub-generated README commit, merged with `--allow-unrelated-histories` (project README kept), no force push.
-* Not yet proven: public visibility. The unauthenticated GitHub API returns 404, so the repo is private; the plan requires public.
+* Paul made the repo public. The unauthenticated GitHub API reports `visibility: public` and lists the section 6 layout at the repo root.
+* Phase 0 acceptance criteria: both met.
 Blocked or open:
-* Paul to switch the repo to public (Settings, General, Danger Zone, Change visibility).
 * Paul to rename the local folder to `sanctions-list-pipeline` (blocked while open in VS Code).
 Next step:
 * After the push, start Phase 1, task 1 (`config.py`), re-verifying each source URL first.

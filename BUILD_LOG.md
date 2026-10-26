@@ -463,13 +463,13 @@ Next step:
 
 ### 26 October 2026, Phase 0 session (Claude Code)
 Done:
-* Created the project at `C:\Users\paulf\sanctions-list-pipeline` with git, uv and Python 3.12.13.
+* Created the project at `C:\Users\paulf\global-sanctions-data-platform` with git, uv and Python 3.12.13.
 * `uv init` defaulted to `requires-python >= 3.13`; corrected to `>=3.12,<3.13` and pinned `.python-version` to 3.12.
 * Switched from the flat `uv init` app layout to a `src/sanctions_platform` package built with hatchling, so the package imports cleanly in tests and Dagster. Removed the generated `main.py`.
 * Installed all runtime and dev dependencies; `uv.lock` generated. Resolved versions recorded in `docs/decisions/0001-stack.md`.
 * Created the section 6 folder layout. Empty folders hold a `.gitkeep` so the layout is visible on GitHub; each is removed when the folder gets real content.
 * Wrote `.gitignore`, a README stub with the demonstration disclaimer, and `tests/test_package.py` (import smoke test; pytest exits non-zero when it collects zero tests).
-* Paul chose the project name Sanctions List Pipeline (repo `sanctions-list-pipeline`). Replaced the working title in every file (`pyproject.toml`, `README.md`, this log, `uv.lock` regenerated) and renamed the local folder. The Python package name `sanctions_platform` is unchanged, as defined in section 6.
+* Paul chose the project name Sanctions List Pipeline (repo `sanctions-list-pipeline`). Replaced the working title in every file (`pyproject.toml`, `README.md`, this log, `uv.lock` regenerated) The local folder rename was blocked because Windows reported it in use; Paul to rename it to `sanctions-list-pipeline` after closing it in VS Code. The Python package name `sanctions_platform` is unchanged, as defined in section 6.
 Proven:
 * `uv sync` succeeds, `uv run ruff check .` reports all checks passed, `uv run pytest` reports 1 passed.
 * Not yet proven: repository visible on GitHub (waiting on the push).

@@ -1,11 +1,10 @@
 # Sanctions List Pipeline: Build Log
 
-Owner: Paul Adebayo (GitHub: TechPaulFrey)
-Executor: Claude Code, working in Paul's Windows environment
+Owner: Paul Adebayo 
 Log started: 26 October 2026
-Project name: Sanctions List Pipeline. Repository name: `sanctions-list-pipeline`. Chosen by Paul on 26 October 2026, replacing the working title Sanctions List Pipeline.
+Project name: Sanctions List Pipeline. Repository name: `sanctions-list-pipeline`. 
 
-This file is the single source of truth for the build. Claude Code reads it at the start of every session, works phase by phase, ticks acceptance criteria only when they are proven, and appends to the Progress Log at the end of every session.
+This file is the single source of truth for the build. 
 
 
 ## 1. What we are building and why

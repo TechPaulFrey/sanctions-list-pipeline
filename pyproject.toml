@@ -1,5 +1,5 @@
 [project]
-name = "global-sanctions-data-platform"
+name = "sanctions-list-pipeline"
 version = "0.1.0"
 description = "Daily ingestion, history and cross-list linking of the UN, OFAC, UK and Nigeria sanctions lists."
 readme = "README.md"

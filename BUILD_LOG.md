@@ -1,9 +1,9 @@
-# Global Sanctions Data Platform: Build Log
+# Sanctions List Pipeline: Build Log
 
 Owner: Paul Adebayo (GitHub: TechPaulFrey)
 Executor: Claude Code, working in Paul's Windows environment
 Log started: 26 October 2026
-Working title: Global Sanctions Data Platform. Repository name: `global-sanctions-data-platform`. If Paul chooses a different name, do one project wide search and replace before Phase 0 ends, and record the change in the Progress Log.
+Project name: Sanctions List Pipeline. Repository name: `sanctions-list-pipeline`. Chosen by Paul on 26 October 2026, replacing the working title Sanctions List Pipeline.
 
 This file is the single source of truth for the build. Claude Code reads it at the start of every session, works phase by phase, ticks acceptance criteria only when they are proven, and appends to the Progress Log at the end of every session.
 
@@ -119,7 +119,7 @@ Version policy: at Phase 0, install the latest stable release of each package an
 ## 6. Repository layout
 
 ```
-global-sanctions-data-platform/
+sanctions-list-pipeline/
 ├── BUILD_LOG.md                  this file
 ├── README.md
 ├── pyproject.toml
@@ -175,8 +175,8 @@ irm https://astral.sh/uv/install.ps1 | iex
 uv python install 3.12
 
 # Create the project
-mkdir global-sanctions-data-platform
-cd global-sanctions-data-platform
+mkdir sanctions-list-pipeline
+cd sanctions-list-pipeline
 git init
 uv init
 uv python pin 3.12
@@ -217,12 +217,12 @@ Tasks:
 2. Create the folder layout in section 6.
 3. Write `.gitignore` covering `data/`, `.venv/`, `transform/target/`, `transform/logs/`, `transform/dbt_packages/`, `.dagster_home/`, `dashboard/dist/`, `__pycache__/`.
 4. Write `docs/decisions/0001-stack.md` with the resolved versions and the reasons from section 5.
-5. Paul creates an empty public repository named `global-sanctions-data-platform` on github.com under TechPaulFrey. Then:
+5. Paul creates an empty public repository named `sanctions-list-pipeline` on github.com under TechPaulFrey. Then:
    ```powershell
    git add .
    git commit -m "chore: bootstrap project structure"
    git branch -M main
-   git remote add origin https://github.com/TechPaulFrey/global-sanctions-data-platform.git
+   git remote add origin https://github.com/TechPaulFrey/sanctions-list-pipeline.git
    git push -u origin main
    ```
 Acceptance criteria:
@@ -231,7 +231,7 @@ Acceptance criteria:
 
 ### Phase 1. Fetchers, raw store and manifest
 Tasks:
-1. `config.py`: hold the exact URLs from section 2, a User Agent string of `global-sanctions-data-platform/0.1 (+https://github.com/TechPaulFrey/global-sanctions-data-platform)`, a 60 second timeout, and the data paths.
+1. `config.py`: hold the exact URLs from section 2, a User Agent string of `sanctions-list-pipeline/0.1 (+https://github.com/TechPaulFrey/sanctions-list-pipeline)`, a 60 second timeout, and the data paths.
 2. Shared HTTP client: httpx with retries on connection errors and HTTP 429 and 5xx, using tenacity with exponential backoff (3 attempts, starting at 2 seconds). Send `If-None-Match` and `If-Modified-Since` when a previous ETag or Last-Modified value exists.
 3. Raw store: write the file, then compute SHA256. If the hash matches the latest stored file for that source, delete the temporary file and record `unchanged` in the manifest.
 4. Manifest table `raw_manifest` in DuckDB with columns: run_id, source, url, fetched_at_utc, http_status, etag, last_modified, bytes, sha256, outcome (`stored`, `unchanged`, `failed`), error_message, raw_path.
@@ -463,17 +463,17 @@ Next step:
 
 ### 26 October 2026, Phase 0 session (Claude Code)
 Done:
-* Created the project at `C:\Users\paulf\global-sanctions-data-platform` with git, uv and Python 3.12.13.
+* Created the project at `C:\Users\paulf\sanctions-list-pipeline` with git, uv and Python 3.12.13.
 * `uv init` defaulted to `requires-python >= 3.13`; corrected to `>=3.12,<3.13` and pinned `.python-version` to 3.12.
 * Switched from the flat `uv init` app layout to a `src/sanctions_platform` package built with hatchling, so the package imports cleanly in tests and Dagster. Removed the generated `main.py`.
 * Installed all runtime and dev dependencies; `uv.lock` generated. Resolved versions recorded in `docs/decisions/0001-stack.md`.
 * Created the section 6 folder layout. Empty folders hold a `.gitkeep` so the layout is visible on GitHub; each is removed when the folder gets real content.
 * Wrote `.gitignore`, a README stub with the demonstration disclaimer, and `tests/test_package.py` (import smoke test; pytest exits non-zero when it collects zero tests).
+* Paul chose the project name Sanctions List Pipeline (repo `sanctions-list-pipeline`). Replaced the working title in every file (`pyproject.toml`, `README.md`, this log, `uv.lock` regenerated) and renamed the local folder. The Python package name `sanctions_platform` is unchanged, as defined in section 6.
 Proven:
 * `uv sync` succeeds, `uv run ruff check .` reports all checks passed, `uv run pytest` reports 1 passed.
 * Not yet proven: repository visible on GitHub (waiting on the push).
 Blocked or open:
-* Paul to confirm the final project name (working title still in use).
-* Paul to create the empty public repo `TechPaulFrey/global-sanctions-data-platform` on github.com, then the initial push.
+* Paul to create the empty public repo `TechPaulFrey/sanctions-list-pipeline` on github.com, then the initial push.
 Next step:
 * After the push, start Phase 1, task 1 (`config.py`), re-verifying each source URL first.

@@ -1,0 +1,10 @@
+data/
+.venv/
+transform/target/
+transform/logs/
+transform/dbt_packages/
+.dagster_home/
+dashboard/dist/
+__pycache__/
+.pytest_cache/
+.ruff_cache/
